@@ -81,6 +81,7 @@ if __name__ == "__main__":
                 print("{} was reverted!".format(file))
 
         if ok:
+            print("No reverts")
             sys.exit(0)
         else:
             sys.exit(1)
@@ -90,14 +91,23 @@ if __name__ == "__main__":
             ref2 = r.branches[args.f]
         else:
             ref2 = r.branches["develop"]
+            current_base = feature_base(r.head)
+            ahead_count = 0
+            for c in r.iter_commits(r.branches["develop"]):
+                if c == current_base:
+                    break
+                else:
+                    ahead_count += 1
+            print("Develop is {} commits ahead of current branch".format(ahead_count))
+
         conflicts = features_conflicts(r.head, ref2)
 
         for path in conflicts:
             print("{} was changed in both branches!".format(path))
 
         if len(conflicts) == 0:
-            verbose("")
-            verbose("No conflicts!")
+            print("")
+            print("No conflicts")
             sys.exit(0)
         else:
             sys.exit(1)
