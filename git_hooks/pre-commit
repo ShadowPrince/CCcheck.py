@@ -1,0 +1,3 @@
+#!/bin/sh
+CCcheck.py r
+exit 0
