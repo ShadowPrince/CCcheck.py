@@ -1,3 +1,9 @@
-#!/bin/sh
-CCcheck.py r
+#!/bin/bash
+check=$(CCcheck.py r)
+
+if [[ $check != "No reverts" ]]; then
+    echo $check
+    read -p "Don't forget to add those manually! [enter]" -n 1 -r < /dev/tty
+fi;
+
 exit 0
