@@ -1,7 +1,8 @@
 ## Installation
 
-* Get python3
-* Install `GitPython` with pip
+* `sudo easy_install GitPython`
+* `chmod +x CCcheck.py`
+* Link `CCcheck.py` to `$PATH`
 
 ## Usage
 
@@ -17,4 +18,4 @@
 ## Arguments
 
 * `-v` - verbose. Use this when in doubt
-* `-f` - argument for `conflict` op which will use different branch instead of `develop`.
+* `-b` - argument for `conflict` op which will use different branch instead of `develop`.

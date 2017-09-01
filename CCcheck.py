@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/python
 import git
 import sys
 import itertools
@@ -6,7 +6,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("op")
-parser.add_argument("-f", default=None)
+parser.add_argument("-b", default=None)
 parser.add_argument("-v", action="store_true", default=False)
 args = parser.parse_args()
 
@@ -87,8 +87,8 @@ if __name__ == "__main__":
             sys.exit(1)
 
     elif args.op == "conflict" or args.op == "c":
-        if args.f:
-            ref2 = r.branches[args.f]
+        if args.b:
+            ref2 = r.branches[args.b]
         else:
             ref2 = r.branches["develop"]
             current_base = feature_base(r.head)
