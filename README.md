@@ -1,7 +1,8 @@
 ## Installation
 
-* Get python3
-* Install `GitPython` with pip
+* `sudo easy_install GitPython`
+* `chmod +x CCcheck.py`
+* Link `CCcheck.py` to `$PATH`
 
 ## Usage
 
