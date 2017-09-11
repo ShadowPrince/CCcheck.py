@@ -4,6 +4,8 @@ import sys
 import itertools
 import argparse
 
+COMMIT_SEARCH_LIMIT = 50
+
 parser = argparse.ArgumentParser()
 parser.add_argument("op")
 parser.add_argument("-b", default=None)
@@ -15,8 +17,8 @@ def verbose(msg, *_args, **kwargs):
         print(msg.format(*_args, **kwargs))
 
 def feature_base(at_ref):
-    for commit in r.iter_commits(r.branches["develop"], max_count=30):
-        if commit in r.iter_commits(at_ref, max_count=30):
+    for commit in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
+        if commit in r.iter_commits(at_ref, max_count=COMMIT_SEARCH_LIMIT):
             verbose("{} based at {} in develop", at_ref, commit)
             return commit
 
@@ -28,7 +30,7 @@ def feature_files_changed(ref):
         print("Can't find base commit for {}!", ref)
         return None
 
-    for c in r.iter_commits(ref):
+    for c in r.iter_commits(ref, max_count=COMMIT_SEARCH_LIMIT):
         if c == base:
             break
         else:
@@ -46,7 +48,7 @@ def features_conflicts(ref1, ref2):
     if ref2 == r.branches["develop"]:
         ref1_base = feature_base(ref1)
         ref2_changes = []
-        for c in r.iter_commits(r.branches["develop"]):
+        for c in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
             if c == ref1_base:
                 break
             else:
@@ -93,7 +95,7 @@ if __name__ == "__main__":
             ref2 = r.branches["develop"]
             current_base = feature_base(r.head)
             ahead_count = 0
-            for c in r.iter_commits(r.branches["develop"]):
+            for c in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
                 if c == current_base:
                     break
                 else:
