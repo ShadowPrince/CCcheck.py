@@ -2,85 +2,24 @@
 import git
 import sys
 import itertools
-import argparse
+import os
 
-COMMIT_SEARCH_LIMIT = 50
+from cchelper.utils import verbose, parse_args, open_url_in_browser
+from cchelper import githelper
+from cchelper import ccollab
+from cchelper import db
 
-parser = argparse.ArgumentParser()
-parser.add_argument("op")
-parser.add_argument("-b", default=None)
-parser.add_argument("-v", action="store_true", default=False)
-args = parser.parse_args()
-
-def verbose(msg, *_args, **kwargs):
-    if args.v:
-        print(msg.format(*_args, **kwargs))
-
-def feature_base(at_ref):
-    for commit in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
-        if commit in r.iter_commits(at_ref, max_count=COMMIT_SEARCH_LIMIT):
-            verbose("{} based at {} in develop", at_ref, commit)
-            return commit
-
-def feature_files_changed(ref):
-    result = []
-    base = feature_base(ref)
-
-    if not base:
-        print("Can't find base commit for {}!", ref)
-        return None
-
-    for c in r.iter_commits(ref, max_count=COMMIT_SEARCH_LIMIT):
-        if c == base:
-            break
-        else:
-            verbose("Adding changes from {}", c)
-            result += c.stats.files.keys()
-
-    return result
-
-def features_conflicts(ref1, ref2):
-    verbose("Finding conflicts between {}", ref1)
-    ref1_changes = feature_files_changed(ref1)
-    verbose("")
-    verbose("And {}", ref2)
-
-    if ref2 == r.branches["develop"]:
-        ref1_base = feature_base(ref1)
-        ref2_changes = []
-        for c in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
-            if c == ref1_base:
-                break
-            else:
-                verbose("Adding changes from {}", c)
-                ref2_changes += c.stats.files.keys()
-    else:
-        ref2_changes = feature_files_changed(ref2)
-
-    verbose("")
-    for path in ref1_changes:
-        verbose("{} changed {}", ref1, path)
-    for path in ref2_changes:
-        verbose("{} changed {}", ref2, path)
-
-    return set(ref1_changes).intersection(set(ref2_changes))
+args = parse_args()
 
 if __name__ == "__main__":
-    r = git.Repo(".")
+    r = githelper.open_repo(".")
     develop_head = r.branches["develop"].commit
 
     if args.op == "revert" or args.op == "r":
-        based_on = feature_base(r.head)
-
-        head_files = list(map(lambda x: x.b_path, based_on.diff(r.head.commit)))
-        working_files = list(map(lambda x: x.b_path, based_on.diff(None)))
-        verbose("{} total edits from HEAD, {} from working tree", len(head_files), len(working_files))
-
         ok = True
-        for file in head_files:
-            if file not in working_files:
-                ok = False
-                print("{} was reverted!".format(file))
+        for file in githelper.reverts_list():
+            print("{} was reverted!".format(file))
+            ok = False
 
         if ok:
             print("No reverts")
@@ -89,20 +28,7 @@ if __name__ == "__main__":
             sys.exit(1)
 
     elif args.op == "conflict" or args.op == "c":
-        if args.b:
-            ref2 = r.branches[args.b]
-        else:
-            ref2 = r.branches["develop"]
-            current_base = feature_base(r.head)
-            ahead_count = 0
-            for c in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
-                if c == current_base:
-                    break
-                else:
-                    ahead_count += 1
-            print("Develop is {} commits ahead of current branch".format(ahead_count))
-
-        conflicts = features_conflicts(r.head, ref2)
+        conflicts = githelper.conflicts_list(args.b)
 
         for path in conflicts:
             print("{} was changed in both branches!".format(path))
@@ -114,6 +40,24 @@ if __name__ == "__main__":
         else:
             sys.exit(1)
 
+    elif args.op == "updatecc" or args.op == "cc":
+        did_create = False
+        files = githelper.feature_files_changed(r.head)
+        id = db.get(r.head.ref)
+
+        if not id:
+            id = ccollab.create_new_review(files)
+            db.set(r.head.ref, id)
+            did_create = True
+        else:
+            ccollab.append_to_review(id, files)
+
+        if did_create or args.always_open_browser:
+            open_url_in_browser(ccollab.review_url(id))
+    elif args.op == "cc_clean":
+        db.set(r.head.ref, None)
+    elif args.op == "cc_id":
+        print(db.get(r.head.ref))
     else:
         print("Unknown operation!")
         sys.exit(1)

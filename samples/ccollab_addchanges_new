@@ -1,0 +1,30 @@
+Connecting to server at https://laxm1bapps565.ent.core.medtronic.com
+Using proxy server: 192.168.56.101:6588
+Connected to Collaborator Enterprise v11.0.11000
+Connected as: Vasyl Horbachenko (horbav2)
+Attaching changelist to review.
+Auto-detecting SCM System for 'BLEConnect/main.m'
+Detected Git
+Getting status of file BLEConnect/main.m
+Adding changes managed by GIT_DIR=/Users/vasyl.horbachenko/projects/_Misc/BLEConnect
+Loading Git data for 1 selected files
+Opening text editor for modifying edit list
+To edit the list of files to upload, edit the temporary file
+/var/folders/zd/_sch6m7d1l708w7vt0nvqj7w0000gs/T/edit-list3957937272047064251.txt
+You may need to press Ctrl-Z to get back to your terminal now, followed
+by 'fg' to resume this process.
+If you are running in an environment that supports graphical editors, you
+may set the "editor-prompt" global option to automatically open your editor.
+Sorry, terminal-based editors cannot be launched automatically.
+
+Press Enter when you've finished editing the file list...
+>
+
+Collecting 1 files for review
+Adding BLEConnect/main.m
+Loading version info for BLEConnect/main.m
+Sending file contents to Collaborator Enterprise server
+Creating changelist
+BLEConnect/main.m
+Uploading files...
+Local changes successfully attached to review 15998.
