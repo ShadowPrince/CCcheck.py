@@ -11,54 +11,88 @@ from cchelper import db
 
 args = parse_args()
 
-if __name__ == "__main__":
-    r = githelper.open_repo(".")
-    develop_head = r.branches["develop"].commit
+def open_repo():
+    return githelper.open_repo(".")
 
-    if args.op == "revert" or args.op == "r":
-        ok = True
-        for file in githelper.reverts_list():
-            print("{} was reverted!".format(file))
-            ok = False
+def op_reverts():
+    r = open_repo()
 
-        if ok:
-            print("No reverts")
-            sys.exit(0)
-        else:
-            sys.exit(1)
+    ok = True
+    for file in githelper.reverts_list():
+        print("{} was reverted!".format(file))
+        ok = False
 
-    elif args.op == "conflict" or args.op == "c":
-        conflicts = githelper.conflicts_list(args.b)
+    if ok:
+        print("No reverts")
+        return 0
+    else:
+        return 1
 
-        for path in conflicts:
-            print("{} was changed in both branches!".format(path))
+def op_conflict():
+    r = open_repo()
 
-        if len(conflicts) == 0:
-            print("")
-            print("No conflicts")
-            sys.exit(0)
-        else:
-            sys.exit(1)
+    conflicts = githelper.conflicts_list(args.b)
+    for path in conflicts:
+        print("{} was changed in both branches!".format(path))
 
-    elif args.op == "updatecc" or args.op == "cc":
+    if len(conflicts) == 0:
+        print("")
+        print("No conflicts")
+        return 0
+    else:
+        return 1
+
+def op_cc():
+    r = open_repo()
+    cc_op = len(args.args) and args.args[0] or None
+
+    if cc_op == "auto" or cc_op == "manual":
         did_create = False
-        files = githelper.feature_files_changed(r.head)
-        id = db.get(r.head.ref)
+        if cc_op == "manual":
+            files = args.args[1:]
+        else:
+            files = githelper.feature_files_changed(r.head)
 
+        id = db.get(r.head.ref)
         if not id:
-            id = ccollab.create_new_review(files)
+            id = str(ccollab.create_new_review(files))
             db.set(r.head.ref, id)
+            ccollab.update_review_title(id, r.head.commit.message.strip())
             did_create = True
         else:
             ccollab.append_to_review(id, files)
 
         if did_create or args.always_open_browser:
             open_url_in_browser(ccollab.review_url(id))
-    elif args.op == "cc_clean":
+    elif cc_op == "setid":
+        db.set(r.head.ref, args.args[1])
+    elif cc_op == "reset":
         db.set(r.head.ref, None)
-    elif args.op == "cc_id":
+    elif cc_op == "id":
         print(db.get(r.head.ref))
+    elif cc_op == "browse":
+        id = db.get(r.head.ref)
+        if id:
+            open_url_in_browser(ccollab.review_url(id))
+        else:
+            print("cc: failed, no id")
+            return 1
     else:
-        print("Unknown operation!")
-        sys.exit(1)
+        print("cc: Unknown operation!")
+        return 1
+
+    return 0
+
+
+if __name__ == "__main__":
+    ops = {"revert r": op_reverts,
+            "conflict c": op_conflict,
+            "cc": op_cc, }
+
+    for names, cb in ops.items():
+        if args.op in names.split(" "):
+            sys.exit(cb())
+
+    print("Unknown operation!")
+    sys.exit(1)
 

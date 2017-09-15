@@ -11,7 +11,6 @@ def review_url(id):
     return "https://laxm1bapps565.ent.core.medtronic.com/ui#review:id={}".format(id)
 
 def call_ccollab(*args):
-    global TEE_FILE
     cmd = "ccollab"
     default_args = ["--no-browser", "--non-interactive",  ]
     args = [pipes.quote(x) for x in default_args + list(args)]
@@ -27,9 +26,12 @@ def call_ccollab(*args):
     except OSError:
         pass
 
-    verbose("sh > {}".format(line))
+    print("sh > {}".format(line))
+    if raw_input("run it? y/n > ") != "y":
+        return
+
     os.system(line)
-    #TEE_FILE = "/Users/vasyl.horbachenko/projects/_Misc/CCcheck/samples/ccollab_addchanges_new"
+    #with open("/Users/vasyl.horbachenko/projects/_Misc/CCcheck/samples/ccollab_addchanges_new", "r") as f:
     with open(TEE_FILE, "r") as f:
         lines = f.readlines()
         if not len(lines):
@@ -49,3 +51,6 @@ def create_new_review(files):
 
 def append_to_review(id, files):
     call_ccollab("addchanges", id, *files)
+
+def update_review_title(id, title):
+    call_ccollab("admin", "review", "edit", id, "--title", title)
