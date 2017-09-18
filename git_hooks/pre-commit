@@ -1,5 +1,5 @@
 #!/bin/bash
-check=$(CCcheck.py r)
+check=$(ccutil.py revert)
 
 if [[ $check != "No reverts" ]]; then
     echo $check

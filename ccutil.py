@@ -4,10 +4,10 @@ import sys
 import itertools
 import os
 
-from cchelper.utils import verbose, parse_args, open_url_in_browser
-from cchelper import githelper
-from cchelper import ccollab
-from cchelper import db
+from ccutil.utils import verbose, parse_args, open_url_in_browser
+from ccutil import githelper
+from ccutil import ccollab
+from ccutil import db
 
 args = parse_args()
 
