@@ -42,11 +42,11 @@ def op_conflict():
     else:
         return 1
 
-def op_cc():
+def op_update():
     r = open_repo()
     cc_op = len(args.args) and args.args[0] or None
 
-    if cc_op == "auto" or cc_op == "manual":
+    if cc_op == "auto" or cc_op == "manual" or cc_op == None:
         did_create = False
         if cc_op == "manual":
             files = args.args[1:]
@@ -87,7 +87,7 @@ def op_cc():
 if __name__ == "__main__":
     ops = {"revert r": op_reverts,
             "conflict c": op_conflict,
-            "cc": op_cc, }
+            "update up": op_update, }
 
     for names, cb in ops.items():
         if args.op in names.split(" "):

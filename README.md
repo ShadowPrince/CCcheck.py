@@ -22,7 +22,7 @@ _Arguments_:
 
 * `-b BRANCH` - check for conflicts agains `BRANCH` instead of develop.
 
-### `cc`
+### `update` (or `up`)
 ccollab commandline helper. At first run creates CC with name matching last commit message, updates it on subsequent runs.
 
 _Following operations are available_:
