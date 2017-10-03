@@ -1,9 +1,18 @@
 import git
+import subprocess
 
 from utils import verbose
 
 COMMIT_SEARCH_LIMIT = 50
 r = None
+
+def commit_change_list(commit):
+    result = []
+    output = subprocess.check_output(["git", "diff-tree", "--no-commit-id", "-r", str(commit), ])
+    for line in output.splitlines():
+        words = line.split()
+        result.append([words[-1], words[3]])
+    return result
 
 def open_repo(path):
     global r
@@ -29,7 +38,7 @@ def feature_files_changed(ref):
             break
         else:
             verbose("Adding changes from {}", c)
-            result += c.stats.files.keys()
+            result += commit_change_list(c)
 
     return result
 
@@ -47,17 +56,19 @@ def features_conflicts(ref1, ref2):
                 break
             else:
                 verbose("Adding changes from {}", c)
-                ref2_changes += c.stats.files.keys()
+                ref2_changes += commit_change_list(c)
     else:
         ref2_changes = feature_files_changed(ref2)
 
-    verbose("")
-    for path in ref1_changes:
-        verbose("{} changed {}", ref1, path)
-    for path in ref2_changes:
-        verbose("{} changed {}", ref2, path)
+    conflicts = []
+    for (path1, hash1) in ref1_changes:
+        verbose("{:<6} changed {:<100} {:>6}", str(ref1)[:6], path1, hash1[:6])
+        for (path2, hash2) in ref2_changes:
+            verbose("{:<6} changed {:<100} {:>6}", str(ref2)[:6], path2, hash2[:6])
+            if path1 == path2 and hash1 != hash2:
+                conflicts.append(path1)
 
-    return set(ref1_changes).intersection(set(ref2_changes))
+    return conflicts
 
 def reverts_list():
     based_on = feature_base(r.head)
