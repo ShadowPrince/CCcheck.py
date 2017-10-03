@@ -51,7 +51,7 @@ def op_update():
         if cc_op == "manual":
             files = args.args[1:]
         else:
-            files = githelper.feature_files_changed(r.head)
+            files = [path for (path, _) in githelper.feature_files_changed(r.head)]
 
         id = db.get(r.head.ref)
         if not id:

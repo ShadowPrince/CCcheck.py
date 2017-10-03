@@ -38,9 +38,9 @@ _Arguments_:
 * `--browser APPLICATION` - browser to use after creating CCs (doesn't open one when argument is not provided)
 * `--always-open-browser` - open browser even on CC update
 
-## Git hooks
+## Addons
 
-There are few git hooks to check for reverts and conflicts on some git operations. Link them to `.git/hooks/` to use.
+There's few goodies in the `addons` folder - autocompletion for bash/zsh, firefox user style and few useful git hooks.
 
 ## Global arguments
 

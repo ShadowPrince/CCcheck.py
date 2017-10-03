@@ -1,0 +1,74 @@
+@-moz-document domain(laxm1bapps565.ent.core.medtronic.com) {
+    div table {
+        border: none !important;
+    }
+
+    .elidedContextSection * {
+        background-image: none !important;
+        background: black !important;
+        color: grey !important;
+    }
+
+    .elidedContextSection {
+        border: solid grey !important;
+    }
+
+    /* line no */
+    .lnlCell, .lnrCell {
+        color: #819090 !important;
+    }
+
+    /* line height */
+    .marCell, .lnlCell, .txtCell, .lnrCell {
+        height: 1em !important;
+    }
+
+    /* sections */
+   .contextSection {
+       background-color: #042029 !important;
+   }
+
+   .changeSection {
+       background-color: #18323A !important;
+   }
+
+   .deleteSection {
+       background-color: #3A140A !important;
+   }
+
+   .addSection {
+       background-color: #014219 !important;
+   }
+
+   /* text color and no border for sections */
+   .changeSection, .addSection, .deleteSection, .contextSection {
+       color: #708284 !important;
+       border: none !important;
+       /* might want to change this */
+       font-family: "PragmataPro" !important;
+   }
+
+   /* change exact match */
+   .SubMatch {
+       background-color: #38321A !important;
+   }
+
+   /* code */
+   .CodeComment {
+       color:#475B62 !important;
+       font-style: italic;
+   }
+
+   .CodeKeyword {
+       color:#738A05 !important;
+       font-weight: normal !important;
+   }
+
+   .CodeFunc {
+       color:#A58300 !important;
+   }
+
+   .CodeConstant {
+       color:#259286 !important;
+   }
+}

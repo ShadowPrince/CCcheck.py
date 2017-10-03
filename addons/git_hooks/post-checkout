@@ -1,0 +1,6 @@
+#!/bin/sh
+
+ccutil.py conflict
+
+cp ~/projects/_Misc/debugmain.m BLEConnect/main.m
+git forget BLEConnect/main.m
