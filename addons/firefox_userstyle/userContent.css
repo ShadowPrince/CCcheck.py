@@ -20,7 +20,13 @@
 
     /* line height */
     .marCell, .lnlCell, .txtCell, .lnrCell {
-        height: 1em !important;
+        height: 0.7em !important;
+        padding: 0;
+    }
+
+    .marCell img {
+       vertical-align: 0px !important;
+       height: 0.7em !important;
     }
 
     /* sections */
