@@ -2,10 +2,14 @@
 
 _ccutil() {
   _arguments -s -S \
-    '-b[branch]:branch:_get_branches' \
-    '-v[verbose]' \
-    '--always-open-browser' \
-    '*:op:(r c up)'
+      '-h[prints help]:' \
+      '-v[verbose]:' \
+      '-b[branch]:branch:_get_branches' \
+      '--browser[browser]:' \
+      '--always-open-browser[always open browser]:' \
+      '1:op:(c r up)' \
+      '2:secop:(auto manual)' \
+      '*:args:_gnu_generic'
 }
 
 _get_branches() {
