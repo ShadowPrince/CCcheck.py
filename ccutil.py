@@ -4,7 +4,7 @@ import sys
 import itertools
 import os
 
-from ccutil.utils import verbose, parse_args, open_url_in_browser
+from ccutil.utils import verbose, message, output, parse_args, open_url_in_browser
 from ccutil import githelper
 from ccutil import ccollab
 from ccutil import db
@@ -19,11 +19,12 @@ def op_reverts():
 
     ok = True
     for file in githelper.reverts_list():
-        print("{} was reverted!".format(file))
+        message("{} was reverted!", file)
+        output(file)
         ok = False
 
     if ok:
-        print("No reverts")
+        message("No reverts")
         return 0
     else:
         return 1
@@ -33,11 +34,12 @@ def op_conflict():
 
     conflicts = githelper.conflicts_list(args.b)
     for path in conflicts:
-        print("{} was changed in both branches!".format(path))
+        message("{} was changed in both branches!", path)
+        output(path)
 
     if len(conflicts) == 0:
-        print("")
-        print("No conflicts")
+        message("")
+        message("No conflicts")
         return 0
     else:
         return 1
@@ -50,10 +52,16 @@ def op_update():
         did_create = False
         if cc_op == "manual":
             files = args.args[1:]
+            if args.reverts:
+                files = files + githelper.reverts_list()
         else:
             files = [os.path.exists(path) and path or "" for (path, _) in githelper.feature_files_changed(r.head)]
 
         id = db.get(r.head.ref)
+        if args.a and not id:
+            message("updated failed: no id in append only mode")
+            return 1
+
         if not id:
             id = str(ccollab.create_new_review(files))
             db.set(r.head.ref, id)
@@ -69,16 +77,17 @@ def op_update():
     elif cc_op == "reset":
         db.set(r.head.ref, None)
     elif cc_op == "id":
-        print(db.get(r.head.ref))
+        message("Current id: {}", db.get(r.head.ref))
+        output(db.get(r.head.ref))
     elif cc_op == "browse":
         id = db.get(r.head.ref)
         if id:
             open_url_in_browser(ccollab.review_url(id))
         else:
-            print("cc: failed, no id")
+            message("browse failed, no id")
             return 1
     else:
-        print("cc: Unknown operation!")
+        message("cc: Unknown operation!")
         return 1
 
     return 0
@@ -93,6 +102,6 @@ if __name__ == "__main__":
         if args.op in names.split(" "):
             sys.exit(cb())
 
-    print("Unknown operation!")
+    message("Unknown operation!")
     sys.exit(1)
 

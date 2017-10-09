@@ -3,7 +3,7 @@ check=$(ccutil.py revert)
 
 if [[ $check != "No reverts" ]]; then
     echo $check
-    read -p "Don't forget to add those manually! [enter]" -n 1 -r < /dev/tty
+    read -p "Don't forget to upload those using up manual --reverts! [enter]" -n 1 -r < /dev/tty
 fi;
 
 exit 0

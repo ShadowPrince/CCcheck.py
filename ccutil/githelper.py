@@ -1,7 +1,7 @@
 import git
 import subprocess
 
-from utils import verbose
+from utils import verbose, message
 
 COMMIT_SEARCH_LIMIT = 50
 r = None
@@ -30,7 +30,7 @@ def feature_files_changed(ref):
     base = feature_base(ref)
 
     if not base:
-        print("Can't find base commit for {}!", ref)
+        message("Can't find base commit for {}!", ref)
         return None
 
     for c in r.iter_commits(ref, max_count=COMMIT_SEARCH_LIMIT):
@@ -96,6 +96,6 @@ def conflicts_list(branch):
                 break
             else:
                 ahead_count += 1
-        print("Develop is {} commits ahead of current branch".format(ahead_count))
+        message("Develop is {} commits ahead of current branch".format(ahead_count))
 
     return features_conflicts(r.head, ref2)

@@ -1,3 +1,6 @@
+
+![ccutil](https://raw.githubusercontent.com/ShadowPrince/ccutil/master/addons/screenshots/ccutil.png)
+
 ## Installation
 
 * `sudo easy_install GitPython`
@@ -35,8 +38,12 @@ _Following operations are available_:
 
 _Arguments_:
 
+* `-a` - append only mode. Instead of creating the review the app will fail
+* `--reverts` - append files that was reverted to `manual` list of files
 * `--browser APPLICATION` - browser to use after creating CCs (doesn't open one when argument is not provided)
 * `--always-open-browser` - open browser even on CC update
+
+It's encouraged to make an alias for `ccutil.py` that will incapsulate those settings.
 
 ## Addons
 
@@ -45,3 +52,4 @@ There's few goodies in the `addons` folder - autocompletion for bash/zsh, firefo
 ## Global arguments
 
 * `-v` - verbose. Use this when in doubt
+* `-q` - only output useful information

@@ -6,8 +6,9 @@ _ccutil() {
       '-v[verbose]:' \
       '-b[branch]:branch:_get_branches' \
       '--browser[browser]:' \
+      '--reverts[add reverts to manual update]:' \
       '--always-open-browser[always open browser]:' \
-      '1:op:(c r up)' \
+      '1:op:(c conflict r reverts up update)' \
       '2:secop:(auto manual)' \
       '*:args:_gnu_generic'
 }
