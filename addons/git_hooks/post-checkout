@@ -1,3 +1,5 @@
 #!/bin/sh
 
 ccutil.py conflict
+
+cp ~/projects/_Misc/debugmain.m BLEConnect/main.m
