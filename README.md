@@ -1,5 +1,5 @@
 
-![ccutil](https://raw.githubusercontent.com/ShadowPrince/ccutil/master/addons/screenshots/ccutil.png)
+![ccutil](https://raw.githubusercontent.com/ShadowPrince/ccutil/master/addons/screenshots/over.png)
 
 ## Installation
 
