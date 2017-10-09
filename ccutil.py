@@ -55,7 +55,7 @@ def op_update():
             if args.reverts:
                 files = files + githelper.reverts_list()
         else:
-            files = [os.path.exists(path) and path or "" for (path, _) in githelper.feature_files_changed(r.head)]
+            files = [os.path.exists(path) and path or "" for path, _ in githelper.feature_files_changed(r.head).items()]
 
         id = db.get(r.head.ref)
         if args.a and not id:
@@ -65,7 +65,7 @@ def op_update():
         if not id:
             id = str(ccollab.create_new_review(files))
             db.set(r.head.ref, id)
-            ccollab.update_review_title(id, r.head.commit.message.strip())
+            ccollab.update_review(id, r.head.commit.message.strip(), args.group, "git: {}".format(str(r.head.ref)))
             did_create = True
         else:
             ccollab.append_to_review(id, files)

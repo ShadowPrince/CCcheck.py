@@ -21,6 +21,7 @@ update, up - ccollab helper:
     parser.add_argument("args", nargs="*", default=None)
     parser.add_argument("-b", default=None, help="branch to check conflicts against (instead of develop)")
     parser.add_argument("--browser", default=None, help="Browser application to use with CC")
+    parser.add_argument("--group", default=None, help="GUID of CC group to use")
     parser.add_argument("--reverts", default=False, action="store_true", help="Add reverted files to CC (used in manual variant of update)")
     parser.add_argument("--always-open-browser", action="store_true", default=False, help="Open browser even on updating existing CC")
     parser.add_argument("-a", action="store_true", default=False, help="append only mode - quietly fail when there's no review associated with the branch")
@@ -43,5 +44,5 @@ def output(msg, *_args, **_kwargs):
 
 def open_url_in_browser(url):
     if args.browser:
-        utils.message("Opening {}", url)
+        message("Opening {}", url)
         os.system("open -a {} {}".format(args.browser, url))

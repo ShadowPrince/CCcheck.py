@@ -10,7 +10,7 @@ _ccutilpy_completion()
     fi
 
     if [[ ${prev} == "up" ]] ; then
-        COMPREPLY=('auto' 'manual')
+        COMPREPLY=('auto' 'manual' 'id' 'setid' 'reset' 'browse')
         return 0
     fi
 }

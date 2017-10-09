@@ -7,11 +7,12 @@ COMMIT_SEARCH_LIMIT = 50
 r = None
 
 def commit_change_list(commit):
-    result = []
+    result = {}
     output = subprocess.check_output(["git", "diff-tree", "--no-commit-id", "-r", str(commit), ])
     for line in output.splitlines():
         words = line.split()
-        result.append([words[-1], words[3]])
+        result[words[-1]] = words[3]
+
     return result
 
 def open_repo(path):
@@ -26,7 +27,7 @@ def feature_base(at_ref):
             return commit
 
 def feature_files_changed(ref):
-    result = []
+    result = {}
     base = feature_base(ref)
 
     if not base:
@@ -38,7 +39,7 @@ def feature_files_changed(ref):
             break
         else:
             verbose("Adding changes from {}", c)
-            result += commit_change_list(c)
+            result.update(commit_change_list(c))
 
     return result
 
@@ -50,23 +51,28 @@ def features_conflicts(ref1, ref2):
 
     if ref2 == r.branches["develop"]:
         ref1_base = feature_base(ref1)
-        ref2_changes = []
+        ref2_changes = {}
         for c in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
             if c == ref1_base:
                 break
             else:
                 verbose("Adding changes from {}", c)
-                ref2_changes += commit_change_list(c)
+                ref2_changes.update(commit_change_list(c))
     else:
         ref2_changes = feature_files_changed(ref2)
 
+    for path, hash in ref1_changes.items():
+        verbose("{:<10} changed {:<100} {:>6}", str(ref1)[:10], path, hash[:6])
+    for path, hash in ref2_changes.items():
+        verbose("{:<10} changed {:<100} {:>6}", str(ref2)[:10], path, hash[:6])
+
     conflicts = []
-    for (path1, hash1) in ref1_changes:
-        verbose("{:<6} changed {:<100} {:>6}", str(ref1)[:6], path1, hash1[:6])
-        for (path2, hash2) in ref2_changes:
-            verbose("{:<6} changed {:<100} {:>6}", str(ref2)[:6], path2, hash2[:6])
-            if path1 == path2 and hash1 != hash2:
+    for path1, hash1 in ref1_changes.items():
+        for path2, hash2 in ref2_changes.items():
+            if path1 == path2 and hash1 != hash2 and path1 not in conflicts:
                 conflicts.append(path1)
+            elif path1 == path2:
+                message("Path {} was changed in both branches with resulting in equal hashes!", path1)
 
     return conflicts
 

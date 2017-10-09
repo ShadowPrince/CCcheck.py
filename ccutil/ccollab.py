@@ -52,5 +52,12 @@ def create_new_review(files):
 def append_to_review(id, files):
     call_ccollab("addchanges", id, *files)
 
-def update_review_title(id, title):
-    call_ccollab("admin", "review", "edit", id, "--title", title)
+def update_review(id, title, group, overview):
+    args = ["admin", "review", "edit", id,
+            "--title", title,
+            "--custom-field", "Feature=Unknown",
+            "--custom-field", "Overview={}".format(overview), ]
+    if group:
+        args += ["--group", group, ]
+
+    call_ccollab(*args)

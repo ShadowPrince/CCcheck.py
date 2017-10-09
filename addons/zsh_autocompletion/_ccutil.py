@@ -7,10 +7,11 @@ _ccutil() {
       '-b[branch]:branch:_get_branches' \
       '--browser[browser]:' \
       '--reverts[add reverts to manual update]:' \
+      '--group[ccuid group]:' \
       '--always-open-browser[always open browser]:' \
       '1:op:(c conflict r reverts up update)' \
-      '2:secop:(auto manual)' \
-      '*:args:_gnu_generic'
+      '2:secop:(auto manual id setid reset browse)' \
+      '*:args:_files'
 }
 
 _get_branches() {
