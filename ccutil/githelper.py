@@ -61,10 +61,11 @@ def features_conflicts(ref1, ref2):
     else:
         ref2_changes = feature_files_changed(ref2)
 
+    format = "{:<%s} changed {:<100} {}" % len(max(str(ref1), str(ref2)))
     for path, hash in ref1_changes.items():
-        verbose("{:<10} changed {:<100} {:>6}", str(ref1)[:10], path, hash[:6])
+        verbose(format, str(ref1), path, hash[:6])
     for path, hash in ref2_changes.items():
-        verbose("{:<10} changed {:<100} {:>6}", str(ref2)[:10], path, hash[:6])
+        verbose(format, str(ref2), path, hash[:6])
 
     conflicts = []
     for path1, hash1 in ref1_changes.items():
@@ -90,18 +91,18 @@ def reverts_list():
 
     return result
 
-def conflicts_list(branch):
+def conflicts_list(ref1, branch):
     if branch and branch != "develop":
         ref2 = r.branches[branch]
     else:
         ref2 = r.branches["develop"]
-        current_base = feature_base(r.head)
+        current_base = feature_base(ref1)
         ahead_count = 0
         for c in r.iter_commits(r.branches["develop"], max_count=COMMIT_SEARCH_LIMIT):
             if c == current_base:
                 break
             else:
                 ahead_count += 1
-        message("Develop is {} commits ahead of current branch".format(ahead_count))
+        message("Develop is {} commits ahead of {}".format(ahead_count, str(ref1)))
 
-    return features_conflicts(r.head, ref2)
+    return features_conflicts(ref1, ref2)

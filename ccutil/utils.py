@@ -20,6 +20,7 @@ update, up - ccollab helper:
 """)
     parser.add_argument("args", nargs="*", default=None)
     parser.add_argument("-b", default=None, help="branch to check conflicts against (instead of develop)")
+    parser.add_argument("-c", default=None, help="branch to check conflicts with (defaults to current one)")
     parser.add_argument("--browser", default=None, help="Browser application to use with CC")
     parser.add_argument("--group", default=None, help="GUID of CC group to use")
     parser.add_argument("--reverts", default=False, action="store_true", help="Add reverted files to CC (used in manual variant of update)")

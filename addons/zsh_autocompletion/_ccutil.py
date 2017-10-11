@@ -5,6 +5,7 @@ _ccutil() {
       '-h[prints help]:' \
       '-v[verbose]:' \
       '-b[branch]:branch:_get_branches' \
+      '-c[current branch]:currentbranch:_get_branches' \
       '--browser[browser]:' \
       '--reverts[add reverts to manual update]:' \
       '--group[ccuid group]:' \

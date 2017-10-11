@@ -32,7 +32,11 @@ def op_reverts():
 def op_conflict():
     r = open_repo()
 
-    conflicts = githelper.conflicts_list(args.b)
+    ref1 = r.head
+    if args.c:
+        ref1 = r.branches[args.c]
+
+    conflicts = githelper.conflicts_list(ref1, args.b)
     for path in conflicts:
         message("{} was changed in both branches!", path)
         output(path)
@@ -47,6 +51,9 @@ def op_conflict():
 def op_update():
     r = open_repo()
     cc_op = len(args.args) and args.args[0] or None
+    ref = r.head.ref
+    if args.b:
+        ref = args.b
 
     if cc_op == "auto" or cc_op == "manual" or cc_op == None:
         did_create = False
@@ -73,14 +80,14 @@ def op_update():
         if did_create or args.always_open_browser:
             open_url_in_browser(ccollab.review_url(id))
     elif cc_op == "setid":
-        db.set(r.head.ref, args.args[1])
+        db.set(ref, args.args[1])
     elif cc_op == "reset":
-        db.set(r.head.ref, None)
+        db.set(ref, None)
     elif cc_op == "id":
-        message("Current id: {}", db.get(r.head.ref))
-        output(db.get(r.head.ref))
+        message("Current id: {}", db.get(ref))
+        output(db.get(ref))
     elif cc_op == "browse":
-        id = db.get(r.head.ref)
+        id = db.get(ref)
         if id:
             open_url_in_browser(ccollab.review_url(id))
         else:
