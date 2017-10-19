@@ -23,7 +23,8 @@ It compares list of changed files in `develop` commits which are aread of curren
 
 _Arguments_:
 
-* `-b BRANCH` - check for conflicts agains `BRANCH` instead of develop.
+* `-b BRANCH` - check for conflicts against `BRANCH` instead of develop.
+* `-c BRANCH` - set current branch (instead the active one from git)
 
 ### `update` (or `up`)
 ccollab commandline helper. At first run creates CC with name matching last commit message, updates it on subsequent runs.
