@@ -8,6 +8,7 @@ from ccutil.utils import verbose, message, output, parse_args, open_url_in_brows
 from ccutil import githelper
 from ccutil import ccollab
 from ccutil import db
+from ccutil import utils
 
 args = parse_args()
 
@@ -33,10 +34,18 @@ def op_conflict():
     r = open_repo()
 
     ref1 = r.head
+    ref2 = None
     if args.c:
         ref1 = r.branches[args.c]
 
-    conflicts = githelper.conflicts_list(ref1, args.b)
+    conflicts = None
+    if args.r:
+        ref_changes = githelper.feature_files_changed(ref1)
+        cc_changes = ccollab.review_files_changed(args.r)
+        conflicts = utils.hashdict_conflicts(ref_changes, cc_changes, str(ref1), "CC {}".format(args.r))
+    else:
+        conflicts = githelper.conflicts_list(ref1, args.b)
+
     for path in conflicts:
         message("{} was changed in both branches!", path)
         output(path)

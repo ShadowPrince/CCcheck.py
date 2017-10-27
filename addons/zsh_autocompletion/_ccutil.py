@@ -6,6 +6,7 @@ _ccutil() {
       '-v[verbose]:' \
       '-b[branch]:branch:_get_branches' \
       '-c[current branch]:currentbranch:_get_branches' \
+      '-r[review id]:reviewid:' \
       '-a[append only mode]:appendonly:' \
       '--browser[browser]:' \
       '--reverts[add reverts to manual update]:' \

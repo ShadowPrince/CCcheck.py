@@ -24,6 +24,7 @@ It compares list of changed files in `develop` commits which are aread of curren
 _Arguments_:
 
 * `-b BRANCH` - check for conflicts against `BRANCH` instead of develop.
+* `-r CCID` - check for conflicts against review #`CCID` instead of develop.
 * `-c BRANCH` - set current branch (instead the active one from git)
 
 ### `update` (or `up`)
@@ -46,11 +47,12 @@ _Arguments_:
 
 It's encouraged to make an alias for `ccutil.py` that will incapsulate those settings.
 
-## Addons
-
-There's few goodies in the `addons` folder - autocompletion for bash/zsh, firefox user style and few useful git hooks.
-
 ## Global arguments
 
 * `-v` - verbose. Use this when in doubt
 * `-q` - only output useful information
+
+## Addons
+
+There's few goodies in the `addons` folder - autocompletion for bash/zsh, firefox user style and few useful git hooks.
+

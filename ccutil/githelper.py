@@ -1,7 +1,7 @@
 import git
 import subprocess
 
-from utils import verbose, message
+from utils import verbose, message, hashdict_conflicts
 
 COMMIT_SEARCH_LIMIT = 50
 r = None
@@ -61,21 +61,7 @@ def features_conflicts(ref1, ref2):
     else:
         ref2_changes = feature_files_changed(ref2)
 
-    format = "{:<%s} changed {:<100} {}" % len(max(str(ref1), str(ref2)))
-    for path, hash in ref1_changes.items():
-        verbose(format, str(ref1), path, hash[:6])
-    for path, hash in ref2_changes.items():
-        verbose(format, str(ref2), path, hash[:6])
-
-    conflicts = []
-    for path1, hash1 in ref1_changes.items():
-        for path2, hash2 in ref2_changes.items():
-            if path1 == path2 and hash1 != hash2 and path1 not in conflicts:
-                conflicts.append(path1)
-            elif path1 == path2:
-                message("Path {} was changed in both branches with resulting in equal hashes!", path1)
-
-    return conflicts
+    return hashdict_conflicts(ref1_changes, ref2_changes, str(ref1), str(ref2))
 
 def reverts_list():
     based_on = feature_base(r.head)
