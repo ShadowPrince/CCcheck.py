@@ -41,6 +41,8 @@ _Following operations are available_:
 _Arguments_:
 
 * `-a` - append only mode. Instead of creating the review the app will fail
+* `-i` - ignore missing files
+* `--commit COMMIT` - use single commit to update the review
 * `--reverts` - append files that was reverted to `manual` list of files
 * `--browser APPLICATION` - browser to use after creating CCs (doesn't open one when argument is not provided)
 * `--always-open-browser` - open browser even on CC update

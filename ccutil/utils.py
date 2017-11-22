@@ -26,10 +26,12 @@ update, up - ccollab helper:
     parser.add_argument("--browser", default=None, help="Browser application to use with CC")
     parser.add_argument("--group", default=None, help="GUID of CC group to use")
     parser.add_argument("--reverts", default=False, action="store_true", help="Add reverted files to CC (used in manual variant of update)")
+    parser.add_argument("--commit", default=None, help="Upload only specific commit")
     parser.add_argument("--always-open-browser", action="store_true", default=False, help="Open browser even on updating existing CC")
     parser.add_argument("-a", action="store_true", default=False, help="append only mode - quietly fail when there's no review associated with the branch")
     parser.add_argument("-q", action="store_true", default=False, help="quiet")
     parser.add_argument("-v", action="store_true", default=False, help="verbose")
+    parser.add_argument("-i", action="store_true", default=False, help="ignore deleted files")
     args = parser.parse_args()
     return args
 

@@ -71,7 +71,12 @@ def op_update():
             if args.reverts:
                 files = files + githelper.reverts_list()
         else:
-            files = [os.path.exists(path) and path or "" for path, _ in githelper.feature_files_changed(r.head).items()]
+            hashes = {}
+            if args.commit:
+                hashes = githelper.commit_change_list(args.commit)
+            else:
+                hashes = githelper.feature_files_changed(r.head)
+            files = [path for path, _ in hashes.items() if args.i and os.path.exists(path) or True]
 
         id = db.get(r.head.ref)
         if args.a and not id:

@@ -1,7 +1,7 @@
 _ccutilpy_completion() 
 {
     local prev opts
-    COMPREPLY=('c' 'conflict' 'r' 'revert' 'up' 'update' '--always-open-browser' '--browser' '--reverts' '-h' '-b' '-c' '-v' '-q' '-a' '-r')
+    COMPREPLY=('c' 'conflict' 'r' 'revert' 'up' 'update' '--always-open-browser' '--browser' '--reverts' '--commit' '--group' '-h' '-b' '-c' '-v' '-q' '-a' '-r', '-i')
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
     if [[ ${prev} == "-b" ]] ; then

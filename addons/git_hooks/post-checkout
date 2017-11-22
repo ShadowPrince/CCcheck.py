@@ -3,3 +3,4 @@
 ccutil.py conflict
 
 cp ~/projects/_Misc/debugmain.m BLEConnect/main.m
+#cp ~/projects/_Misc/debugwhitebox.m BLEConnect/Presenters/Whitebox/TableViewDataSource+Whitebox.m
