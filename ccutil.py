@@ -76,7 +76,13 @@ def op_update():
                 hashes = githelper.commit_change_list(args.commit)
             else:
                 hashes = githelper.feature_files_changed(r.head)
-            files = [path for path, _ in hashes.items() if args.i and os.path.exists(path) or True]
+            files = []
+            for path, _ in hashes.items():
+                if args.i:
+                    if os.path.exists(path):
+                        files.append(path)
+                else:
+                    files.append(path)
 
         id = db.get(r.head.ref)
         if args.a and not id:
