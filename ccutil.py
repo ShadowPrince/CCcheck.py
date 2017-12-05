@@ -70,35 +70,31 @@ def op_update():
             files = args.args[1:]
             if args.reverts:
                 files = files + githelper.reverts_list()
-        else:
-            hashes = {}
-            if args.commit:
-                hashes = githelper.commit_change_list(args.commit)
+
+            id = db.get(r.head.ref)
+            if id:
+                ccollab.append_files_to_review(files)
             else:
-                hashes = githelper.feature_files_changed(r.head)
-            files = []
-            for path, _ in hashes.items():
-                if args.i:
-                    if os.path.exists(path):
-                        files.append(path)
-                else:
-                    files.append(path)
-
-        id = db.get(r.head.ref)
-        if args.a and not id:
-            message("updated failed: no id in append only mode")
-            return 1
-
-        if not id:
-            id = str(ccollab.create_new_review(files))
-            db.set(r.head.ref, id)
-            ccollab.update_review(id, r.head.commit.message.strip(), args.group, "git: {}".format(str(r.head.ref)))
-            did_create = True
+                message("manual upload failed: no id!")
+                return 1
         else:
-            ccollab.append_to_review(id, files)
+            commits = githelper.feature_commits(r.head)
+            id = db.get(r.head.ref)
+            if args.a and not id:
+                message("updated failed: no id in append only mode")
+                return 1
 
-        if did_create or args.always_open_browser:
-            open_url_in_browser(ccollab.review_url(id))
+            if not id:
+                id = str(ccollab.create_new_review(commits))
+                db.set(r.head.ref, id)
+                ccollab.update_review(id, r.head.commit.message.strip(), args.group, "git: {}".format(str(r.head.ref)))
+                did_create = True
+            else:
+                ccollab.append_to_review(id, commits)
+
+            if did_create or args.always_open_browser:
+                open_url_in_browser(ccollab.review_url(id))
+
     elif cc_op == "setid":
         db.set(ref, args.args[1])
     elif cc_op == "reset":

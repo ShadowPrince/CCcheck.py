@@ -19,8 +19,8 @@ def call_ccollab(*args):
 
     return output
 
-def create_new_review(files):
-    lines = call_ccollab("addchanges", "new", *files).splitlines()
+def create_new_review(commits):
+    lines = call_ccollab("addchangelist", "new", *commits).splitlines()
 
     try:
         review_id = int(re.findall(r"\w+ (\d+).", lines[-1])[0])
@@ -29,7 +29,10 @@ def create_new_review(files):
 
     return review_id
 
-def append_to_review(id, files):
+def append_to_review(id, commits):
+    call_ccollab("addchangelist", id, *commits)
+
+def append_files_to_review(id, files):
     call_ccollab("addchanges", id, *files)
 
 def update_review(id, title, group, overview):

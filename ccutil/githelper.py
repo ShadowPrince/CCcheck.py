@@ -43,6 +43,18 @@ def feature_files_changed(ref):
 
     return result
 
+def feature_commits(ref):
+    result = []
+    base = feature_base(ref)
+
+    for c in r.iter_commits(ref, max_count=COMMIT_SEARCH_LIMIT):
+        if c == base:
+            break
+        else:
+            result.append(str(c))
+
+    return result
+
 def features_conflicts(ref1, ref2):
     verbose("Finding conflicts between {}", ref1)
     ref1_changes = feature_files_changed(ref1)
