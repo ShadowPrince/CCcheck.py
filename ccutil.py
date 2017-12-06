@@ -73,7 +73,7 @@ def op_update():
 
             id = db.get(r.head.ref)
             if id:
-                ccollab.append_files_to_review(files)
+                ccollab.append_files_to_review(id, files)
             else:
                 message("manual upload failed: no id!")
                 return 1
