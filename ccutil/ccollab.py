@@ -13,9 +13,8 @@ def review_url(id):
 
 def call_ccollab(*args):
     args = ["ccollab", "--no-browser", "--non-interactive"] + list(args)
-    verbose("sh > {}".format(" ".join(args)))
+    verbose("sh > {}", " ".join(args))
     output = subprocess.check_output(args)
-    verbose(output)
 
     return output
 

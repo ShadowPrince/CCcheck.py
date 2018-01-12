@@ -78,7 +78,12 @@ def op_update():
                 message("manual upload failed: no id!")
                 return 1
         else:
-            commits = githelper.feature_commits(r.head)
+            commits = None
+            if args.commit:
+                commits = [args.commit, ]
+            else:
+                commits = githelper.feature_commits(r.head)
+
             id = db.get(r.head.ref)
             if args.a and not id:
                 message("updated failed: no id in append only mode")
