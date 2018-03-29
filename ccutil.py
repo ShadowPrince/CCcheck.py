@@ -91,8 +91,12 @@ def op_update():
 
             if not id:
                 id = str(ccollab.create_new_review(commits))
-                db.set(r.head.ref, id)
-                ccollab.update_review(id, r.head.commit.message.strip(), args.group, "git: {}".format(str(r.head.ref)))
+                if not args.dry_run:
+                    db.set(r.head.ref, id)
+                ccollab.update_review(id, r.head.commit.message.strip(), db.group(), "git: {}".format(str(r.head.ref)))
+                for k, v in db.participants():
+                    ccollab.add_participant(id, k, v)
+
                 did_create = True
             else:
                 ccollab.append_to_review(id, commits)

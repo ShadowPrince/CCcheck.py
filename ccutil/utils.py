@@ -2,6 +2,8 @@ import argparse
 import os
 
 args = None
+participants = []
+group = None
 
 def parse_args():
     global args
@@ -23,8 +25,8 @@ update, up - ccollab helper:
     parser.add_argument("-r", default=None, help="CC id to check conflicts against (instead of develop)")
 
     parser.add_argument("-c", default=None, help="branch to check conflicts with (defaults to current one)")
+    parser.add_argument("--dry-run", action="store_true", default=None, help="Dry run (use it with to display CC calls without actually sending anything)")
     parser.add_argument("--browser", default=None, help="Browser application to use with CC")
-    parser.add_argument("--group", default=None, help="GUID of CC group to use")
     parser.add_argument("--reverts", default=False, action="store_true", help="Add reverted files to CC (used in manual variant of update)")
     parser.add_argument("--commit", default=None, help="Upload only specific commit")
     parser.add_argument("--always-open-browser", action="store_true", default=False, help="Open browser even on updating existing CC")
@@ -33,10 +35,11 @@ update, up - ccollab helper:
     parser.add_argument("-v", action="store_true", default=False, help="verbose")
     parser.add_argument("-i", action="store_true", default=False, help="ignore deleted files")
     args = parser.parse_args()
+
     return args
 
 def verbose(msg, *_args, **kwargs):
-    if args.v and not args.q:
+    if (args.v or args.dry_run) and not args.q:
         print(msg.format(*_args, **kwargs))
 
 def message(msg, *_args, **_kwargs):
@@ -48,7 +51,7 @@ def output(msg, *_args, **_kwargs):
         print(msg.format(*_args, **_kwargs))
 
 def open_url_in_browser(url):
-    if args.browser:
+    if args.browser and not args.dry_run:
         message("Opening {}", url)
         os.system("open -a {} {}".format(args.browser, url))
 

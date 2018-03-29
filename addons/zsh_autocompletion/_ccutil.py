@@ -11,9 +11,9 @@ _ccutil() {
       '-a[append only mode]:appendonly:' \
       '--browser[browser]:' \
       '--reverts[add reverts to manual update]:' \
-      '--group[ccuid group]:' \
+      '--dry-run[dry run]:' \
       '--always-open-browser[always open browser]:' \
-      '--commit' \
+      '--commit[specify commit hash to upload]:' \
       '1:op:(c conflict r reverts up update)' \
       '2:secop:(auto manual id setid reset browse)' \
       '*:args:_files'

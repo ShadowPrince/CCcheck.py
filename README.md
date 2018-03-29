@@ -46,6 +46,7 @@ _Arguments_:
 * `--reverts` - append files that was reverted to `manual` list of files
 * `--browser APPLICATION` - browser to use after creating CCs (doesn't open one when argument is not provided)
 * `--always-open-browser` - open browser even on CC update
+* `--dry-run` - perform dry run (don't actually send anything, also enables `-v`)
 
 It's encouraged to make an alias for `ccutil.py` that will incapsulate those settings.
 
@@ -53,6 +54,10 @@ It's encouraged to make an alias for `ccutil.py` that will incapsulate those set
 
 * `-v` - verbose. Use this when in doubt
 * `-q` - only output useful information
+
+## Participants config file
+
+`~/.ccutilparticipants` is used to configure group and review participants. First line is ID of the group to use, and other lines is `LOGIN ROLE`, where role can be either `Reviewer` or `Observer`. If the file is present, **ccutil** will use the group and attach participants on review creation.
 
 ## Addons
 

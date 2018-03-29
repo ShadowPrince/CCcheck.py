@@ -1,6 +1,7 @@
 import os
 
 DB_FILE = os.path.expanduser("~/Library/Application Support/cchelper.db")
+CONFIG_FILE = os.path.expanduser("~/.ccutilparticipants")
 
 if not os.path.exists(DB_FILE):
     f = open(DB_FILE, "w")
@@ -36,3 +37,15 @@ def get(key):
                 return v
     return None
 
+def group():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as f:
+            return f.readline().strip()
+
+    return None
+
+def participants():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as f:
+            for line in f.readlines()[1:]:
+                yield line.split()
