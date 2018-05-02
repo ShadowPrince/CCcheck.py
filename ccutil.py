@@ -83,6 +83,7 @@ def op_update():
                 commits = [args.commit, ]
             else:
                 commits = githelper.feature_commits(r.head)
+                commits.reverse()
 
             id = db.get(r.head.ref)
             if args.a and not id:
