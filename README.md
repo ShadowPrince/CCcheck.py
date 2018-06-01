@@ -4,7 +4,7 @@
 ## Installation
 
 * `sudo easy_install GitPython`
-* `chmod +x CCcheck.py`
+* `chmod +x ccutil.py`
 * Link `ccutil.py` to `$PATH`
 
 ## Usage
